@@ -29,7 +29,7 @@ parser = argparse.ArgumentParser()
 # opt.n_classes表示数据集中的类别数量
 # opt.img_size表示生成的图像的大小
 # opt.channels表示生成的图像的通道数
-parser.add_argument("--n_epochs", type=int, default=1, help="number of epochs of training")
+parser.add_argument("--n_epochs", type=int, default=50, help="number of epochs of training")
 parser.add_argument("--batch_size", type=int, default=64, help="size of the batches")
 parser.add_argument("--lr", type=float, default=0.0002, help="adam: learning rate")
 parser.add_argument("--b1", type=float, default=0.5, help="adam: decay of first order momentum of gradient")
@@ -234,16 +234,21 @@ for epoch in range(opt.n_epochs):
         batches_done = epoch * len(dataloader) + i
         if batches_done % opt.sample_interval == 0:
             sample_image(n_row=10, batches_done=batches_done)
-digit = input("Please input the required number:")
-maxnumber = epoch * 468
-img = Image.open('./images/' + str(maxnumber) + '.png')
-# 定义裁剪区域
-left = int(34.2 * (int(digit) ))
-right = int(left + 34.2)
-crop_area = (left, 0, right, 34)
-cropped_img = img.crop(crop_area)
-timestamp = int(time.time())
-timestamp_str = str(timestamp)
-filename = './obj_images/cropped_image_{}.png'.format(timestamp_str)
-cropped_img.save(filename)
-cropped_img.show()
+while True:
+    digit = input("Please input the required number（or input quit to exit）:")
+    if digit == 'quit' :
+        break
+    maxnumber = epoch * 400
+    img = Image.open('./images/' + str(maxnumber) + '.png')
+    # 定义裁剪区域
+    left = int(34.2 * (int(digit) ))
+    right = int(left + 34.2)
+    crop_area = (left, 0, right, 34)
+    cropped_img = img.crop(crop_area)
+    timestamp = int(time.time())
+    timestamp_str = str(timestamp)
+    filename = './obj_images/cropped_image_{}.png'.format(timestamp_str)
+    target_size = (400, 300)
+    resized_image = cropped_img.resize(target_size)
+    resized_image.save(filename)
+    resized_image.show()
